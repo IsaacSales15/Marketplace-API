@@ -12,12 +12,26 @@ export const createUser = async (req: Request, res: Response) => {
         }
     });
 
+// Serve para verificar se o acesso existe
+    const isAccessName = await prisma.access.findUnique({
+        where: {
+            name: accessName
+        } 
+    });
+
+// Se não exisir, ele retornará um erro
+    if (!isAccessName) {
+        return res.status(400).json({error: "Nível de acesso não existe"});
+    }
+
     if (isUserEmail) {
         return res.status(400).json({error: "Email já existe"});
     }
 
+// Criptografar a senha
     const hashPassword = await hash(password, 8);
 
+// Criar o novo usuário
     const user = await prisma.user.create({
         data: {
             name,
@@ -27,6 +41,16 @@ export const createUser = async (req: Request, res: Response) => {
                 connect: {
                     name: accessName
                 }
+            }
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            Access: {
+               select: {
+                name: true
+            }
             }
         }
     });

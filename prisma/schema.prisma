@@ -16,6 +16,7 @@ model User {
   update_at  DateTime @updatedAt
   Access     Access?  @relation(fields: [accessId], references: [id])
   accessId   String?
+  store      Store[]
 }
 
 model Access {
@@ -43,4 +44,6 @@ model Store {
   Product    Product[]
   created_at DateTime  @default(now())
   update_at  DateTime  @updatedAt
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
 }
