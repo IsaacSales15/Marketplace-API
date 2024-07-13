@@ -14,6 +14,7 @@ export const createStore = async (req: Request, res: Response) => {
 
    if (!isUser) return res.status(400).json({ error: "Usuário inexistente" });
 
+// Cria as lojas
    const store = await prisma.store.create({
       data: {
          name,
@@ -27,6 +28,7 @@ export const createStore = async (req: Request, res: Response) => {
    return res.json(store);
 }
 
+// Chama todas as lojas
 export const getAllStore = async (req: Request, res: Response) => {
 
    const stores = await prisma.store.findMany({

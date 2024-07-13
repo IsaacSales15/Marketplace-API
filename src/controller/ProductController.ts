@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../database/prisma";
 
+//Cria os produtos a partir do nome, preço, quantidade e id da loja
 export const createProduct = async (req: Request, res: Response) => {
     const { name, price, amount } = req.body;
     const { storeId } = req.params
@@ -11,6 +12,7 @@ export const createProduct = async (req: Request, res: Response) => {
     return res.json(product);
 }
 
+// Chama todos os produtos
 export const getAllProduct = async (req: Request, res: Response) => {
 
     const productes = await prisma.access.findMany()

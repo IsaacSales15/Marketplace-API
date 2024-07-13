@@ -37,9 +37,13 @@ export const createUser = async (req: Request, res: Response) => {
             name,
             email,
             password: hashPassword,
-            Access: { 
-                connect: {
-                    name: accessName
+            userAccess: { 
+                create: {
+                    Access: { 
+                        connect: { 
+                            name: accessName 
+                        } 
+                    }
                 }
             }
         },
@@ -47,14 +51,42 @@ export const createUser = async (req: Request, res: Response) => {
             id: true,
             name: true,
             email: true,
-            Access: {
-               select: {
-                name: true
-            }
+            userAccess: {
+                select: {
+                    Access: { 
+                        select: {
+                            name: true
+                        }
+                    }
+                }
             }
         }
     });
     return res.json(user);
+}
+
+// Chamar todos os usuários
+export const getAllUser = async (req: Request, res: Response) => {
+
+    const  users = await prisma.user.findMany({
+
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            userAccess: {
+                select: {
+                    Access: { 
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    return res.json(users);
 }
 
 // Deletar todos os usuários existentes
